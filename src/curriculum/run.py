@@ -45,6 +45,10 @@ def register():
             email=form.email.data,
             password=form.password.data,
         )
+
+        if User.get_user(new_user.email):
+            flash("Email already registered. Please log in.", "warning")
+            return redirect(url_for("login"))
         new_user.set_password(form.password.data)
         users_list.append(new_user)
         flash(f"User {new_user.name} registered successfully!", "success")
