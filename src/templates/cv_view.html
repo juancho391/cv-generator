@@ -1,0 +1,52 @@
+{% extends "base_template.html" %}
+
+{% block title %}{{ cv.full_name }} - CV{% endblock %}
+
+{% block content %}
+<h1>{{ cv.full_name }}</h1>
+<p><strong>Title:</strong> {{ cv.title }}</p>
+<p><strong>About Me:</strong> {{ cv.about_me }}</p>
+
+<h2>Experience</h2>
+{% if cv.experience %}
+    <ul>
+        {% for exp in cv.experience %}
+            <li>
+                <strong>{{ exp.position }}</strong> at {{ exp.company }} 
+                ({{ exp.start_date }} - {{ exp.end_date }})<br>
+                {{ exp.description }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No experience added.</p>
+{% endif %}
+
+<h2>Education</h2>
+{% if cv.education %}
+    <ul>
+        {% for edu in cv.education %}
+            <li>
+                <strong>{{ edu.degree }}</strong> at {{ edu.institution }} 
+                ({{ edu.start_date }} - {{ edu.end_date }})<br>
+                {{ edu.description }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No education added.</p>
+{% endif %}
+
+<h2>Skills</h2>
+{% if cv.skills %}
+    <ul>
+        {% for skill in cv.skills %}
+            <li>{{ skill.name }} - Level {{ skill.level }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No skills added.</p>
+{% endif %}
+
+<p><a href="{{ url_for('index') }}">Back to CV list</a></p>
+{% endblock %}

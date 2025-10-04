@@ -73,3 +73,13 @@ def logout():
     logout_user()
     flash("Logged out successfully!", "info")
     return redirect(url_for("index"))
+
+
+@app.route("/cv/<int:cv_id>", methods=["GET", "POST"])
+@login_required
+def view_cv(cv_id):
+    cv = Cv.get_cv_by_id(cv_id)
+    if not cv:
+        flash("CV not found", "danger")
+        return redirect(url_for("index"))
+    return render_template("cv_view.html", cv=cv)
