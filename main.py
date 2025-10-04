@@ -1,6 +1,4 @@
-def main():
-    print("Hello from cv-generator!")
-
+from src.curriculum.run import app
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
