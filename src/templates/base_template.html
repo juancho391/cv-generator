@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Hoja de Vida{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background: #333; color: #fff; padding: 1rem; }
+        nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
+        main { padding: 2rem; }
+        footer { background: #f1f1f1; text-align: center; padding: 1rem; margin-top: 2rem; }
+        .flash { padding: 0.5rem; margin-bottom: 1rem; border-radius: 5px; }
+        .flash-success { background-color: #d4edda; color: #155724; }
+        .flash-danger { background-color: #f8d7da; color: #721c24; }
+        .flash-info { background-color: #cce5ff; color: #004085; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if current_user.is_authenticated %}
+                <span>Welcome, {{ current_user.name }}!</span>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Hoja de Vida App</p>
+    </footer>
+</body>
+</html>
