@@ -23,6 +23,7 @@
             {% if current_user.is_authenticated %}
                 <span>Welcome, {{ current_user.name }}!</span>
                 <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('create_cv') }}">Create CV</a>
             {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
                 <a href="{{ url_for('register') }}">Register</a>
