@@ -1,0 +1,182 @@
+{% extends "base_template.html" %}
+
+{% block title %}Create CV{% endblock %}
+
+{% block content %}
+<h1>Create Your CV</h1>
+
+<form method="POST" action="{{ url_for('create_cv') }}">
+    {{ form.hidden_tag() }}
+
+    <!-- BASIC INFO -->
+    <div>
+        <label>{{ form.full_name.label }}</label><br>
+        {{ form.full_name(size=40) }}
+        {% for error in form.full_name.errors %}
+            <div style="color:red;">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <label>{{ form.title.label }}</label><br>
+        {{ form.title(size=40) }}
+        {% for error in form.title.errors %}
+            <div style="color:red;">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <label>{{ form.about_me.label }}</label><br>
+        {{ form.about_me(rows=4, cols=50) }}
+        {% for error in form.about_me.errors %}
+            <div style="color:red;">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <!-- EXPERIENCE SECTION -->
+    <h3>Experience</h3>
+    <div id="experience-section">
+        {% for exp in form.experience %}
+        <div class="experience-item">
+            <label>Position</label><br>
+            {{ exp.position(size=40) }}<br>
+
+            <label>Company</label><br>
+            {{ exp.company(size=40) }}<br>
+
+            <label>Start Date</label><br>
+            {{ exp.start_date(size=20) }}<br>
+
+            <label>End Date</label><br>
+            {{ exp.end_date(size=20) }}<br>
+
+            <label>Description</label><br>
+            {{ exp.description() }}<br>
+
+            <button type="button" onclick="removeItem(this)">Remove</button>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="button" onclick="addExperience()">Add Experience</button>
+
+    <hr>
+
+    <!-- EDUCATION SECTION -->
+    <h3>Education</h3>
+    <div id="education-section">
+        {% for edu in form.education %}
+        <div class="education-item">
+            <label>Degree</label><br>
+            {{ edu.degree(size=40) }}<br>
+
+            <label>Institution</label><br>
+            {{ edu.institution(size=40) }}<br>
+
+            <label>Start Date</label><br>
+            {{ edu.start_date(size=20) }}<br>
+
+            <label>End Date</label><br>
+            {{ edu.end_date(size=20) }}<br>
+
+            <label>Description</label><br>
+            {{ edu.description(rows=3, cols=40) }}<br>
+
+            <button type="button" onclick="removeItem(this)">Remove</button>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="button" onclick="addEducation()">Add Education</button>
+
+    <hr>
+
+    <!-- SKILLS SECTION -->
+    <h3>Skills</h3>
+    <div id="skills-section">
+        {% for skill in form.skills %}
+        <div class="skill-item">
+            <label>Skill</label><br>
+            {{ skill.name(size=30) }}<br>
+
+            <label>Level (1-5)</label><br>
+            {{ skill.level(size=5) }}<br>
+
+            <button type="button" onclick="removeItem(this)">Remove</button>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="button" onclick="addSkill()">Add Skill</button>
+
+    <hr>
+    <p>{{ form.submit() }}</p>
+</form>
+
+<p><a href="{{ url_for('index') }}">Back to CV list</a></p>
+
+<script>
+function removeItem(btn) {
+    btn.parentElement.remove();
+}
+
+function addExperience() {
+    const container = document.getElementById("experience-section");
+    const index = container.children.length;
+    const html = `
+    <div class="experience-item">
+        <label>Position</label><br>
+        <input type="text" name="experience-${index}-position" size="40"><br>
+        <label>Company</label><br>
+        <input type="text" name="experience-${index}-company" size="40"><br>
+        <label>Start Date</label><br>
+        <input type="text" name="experience-${index}-start_date" size="20"><br>
+        <label>End Date</label><br>
+        <input type="text" name="experience-${index}-end_date" size="20"><br>
+        <label>Description</label><br>
+        <textarea name="experience-${index}-description" rows="3" cols="40"></textarea><br>
+        <button type="button" onclick="removeItem(this)">Remove</button>
+        <hr>
+    </div>`;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function addEducation() {
+    const container = document.getElementById("education-section");
+    const index = container.children.length;
+    const html = `
+    <div class="education-item">
+        <label>Degree</label><br>
+        <input type="text" name="education-${index}-degree" size="40"><br>
+        <label>Institution</label><br>
+        <input type="text" name="education-${index}-institution" size="40"><br>
+        <label>Start Date</label><br>
+        <input type="text" name="education-${index}-start_date" size="20"><br>
+        <label>End Date</label><br>
+        <input type="text" name="education-${index}-end_date" size="20"><br>
+        <label>Description</label><br>
+        <textarea name="education-${index}-description" rows="3" cols="40"></textarea><br>
+        <button type="button" onclick="removeItem(this)">Remove</button>
+        <hr>
+    </div>`;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function addSkill() {
+    const container = document.getElementById("skills-section");
+    const index = container.children.length;
+    const html = `
+    <div class="skill-item">
+        <label>Skill</label><br>
+        <input type="text" name="skills-${index}-name" size="30"><br>
+        <label>Level (1-5)</label><br>
+        <input type="number" name="skills-${index}-level" min="1" max="5" size="5"><br>
+        <button type="button" onclick="removeItem(this)">Remove</button>
+        <hr>
+    </div>`;
+    container.insertAdjacentHTML('beforeend', html);
+}
+</script>
+{% endblock %}
