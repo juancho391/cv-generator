@@ -8,7 +8,6 @@ from flask_login import (
 )
 from .forms import SigNupForm, LoginForm, CVForm
 from .models import User, Cv, users_list, cvs_list
-import secrets
 import os
 
 template_dir = os.path.join(
@@ -79,7 +78,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/cv/<int:cv_id>", methods=["GET", "POST"])
+@app.route("/cv/<int:cv_id>", methods=["GET"])
 @login_required
 def view_cv(cv_id):
     cv = Cv.get_cv_by_id(cv_id)
@@ -87,3 +86,26 @@ def view_cv(cv_id):
         flash("CV not found", "danger")
         return redirect(url_for("index"))
     return render_template("cv_view.html", cv=cv)
+
+
+@app.route("/cv/create", methods=["GET", "POST"])
+@login_required
+def create_cv():
+    form = CVForm()
+    if form.validate_on_submit():
+        new_cv = Cv(
+            id=len(cvs_list) + 1,
+            user_id=current_user.id,
+            full_name=form.full_name.data,
+            title=form.title.data,
+            about_me=form.about_me.data,
+            experience=[exp.data for exp in form.experience],
+            education=[edu.data for edu in form.education],
+            skills=[skill.data for skill in form.skills],
+        )
+        print(new_cv.to_dict)
+        cvs_list.append(new_cv)
+        flash("CV created successfully!", "success")
+        return redirect(url_for("index"))
+    print("CV form errors:", form.errors)
+    return render_template("/admin/cv_form.html", form=form)
